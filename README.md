@@ -367,7 +367,7 @@ MIT License - Free for personal and commercial use with attribution.
 ### Developers
 
 **Abhishek Kadavala**  
-LinkedIn: [linkedin.com/in/abhishek-kadaval](https://www.linkedin.com/in/abhishek-kadaval)
+LinkedIn: [linkedin.com/in/abhishek-kadaval]([https://www.linkedin.com/in/abhishek-kadaval](https://www.linkedin.com/in/abhishek-kadavala-95513a253/))
 
 **Bhavik Shah**  
 LinkedIn: [linkedin.com/in/bhavik-shah](https://www.linkedin.com/in/bhavikshah04/)
@@ -377,4 +377,5 @@ For questions, bug reports, or feature requests, please open an issue on GitHub.
 ---
 
 **AWMFA - Automated Windows Memory Forensics Analysis**
+
 
