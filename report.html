@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    
+	<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.min.js"></script>
+    
+    <!-- DataTables CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/2.0.0/css/dataTables.dataTables.min.css">
+    
+    <style>
+
+        table.dataTable.dtr-inline.collapsed>tbody>tr>td.child,table.dataTable.dtr-inline.collapsed>tbody>tr>th.child,table.dataTable.dtr-inline.collapsed>tbody>tr>td.dataTables_empty{cursor:default !important}table.dataTable.dtr-inline.collapsed>tbody>tr>td.child:before,table.dataTable.dtr-inline.collapsed>tbody>tr>th.child:before,table.dataTable.dtr-inline.collapsed>tbody>tr>td.dataTables_empty:before{display:none !important}table.dataTable.dtr-inline.collapsed>tbody>tr>td.dtr-control,table.dataTable.dtr-inline.collapsed>tbody>tr>th.dtr-control{cursor:pointer}table.dataTable.dtr-inline.collapsed>tbody>tr>td.dtr-control:before,table.dataTable.dtr-inline.collapsed>tbody>tr>th.dtr-control:before{margin-right:.5em;display:inline-block;color:rgba(0, 0, 0, 0.5);content:"►"}table.dataTable.dtr-inline.collapsed>tbody>tr>td.dtr-control.arrow-right::before,table.dataTable.dtr-inline.collapsed>tbody>tr>th.dtr-control.arrow-right::before{content:"◄"}table.dataTable.dtr-inline.collapsed>tbody>tr.parent>td.dtr-control:before,table.dataTable.dtr-inline.collapsed>tbody>tr.parent>th.dtr-control:before{content:"▼"}table.dataTable.dtr-inline.collapsed.compact>tbody>tr>td.dtr-control,table.dataTable.dtr-inline.collapsed.compact>tbody>tr>th.dtr-control{padding-left:.333em}table.dataTable.dtr-column>tbody>tr>td.dtr-control,table.dataTable.dtr-column>tbody>tr>th.dtr-control,table.dataTable.dtr-column>tbody>tr>td.control,table.dataTable.dtr-column>tbody>tr>th.control{cursor:pointer}table.dataTable.dtr-column>tbody>tr>td.dtr-control:before,table.dataTable.dtr-column>tbody>tr>th.dtr-control:before,table.dataTable.dtr-column>tbody>tr>td.control:before,table.dataTable.dtr-column>tbody>tr>th.control:before{display:inline-block;color:rgba(0, 0, 0, 0.5);content:"►"}table.dataTable.dtr-column>tbody>tr>td.dtr-control.arrow-right::before,table.dataTable.dtr-column>tbody>tr>th.dtr-control.arrow-right::before,table.dataTable.dtr-column>tbody>tr>td.control.arrow-right::before,table.dataTable.dtr-column>tbody>tr>th.control.arrow-right::before{content:"◄"}table.dataTable.dtr-column>tbody>tr.parent td.dtr-control:before,table.dataTable.dtr-column>tbody>tr.parent th.dtr-control:before,table.dataTable.dtr-column>tbody>tr.parent td.control:before,table.dataTable.dtr-column>tbody>tr.parent th.control:before{content:"▼"}table.dataTable>tbody>tr.child{padding:.5em 1em}table.dataTable>tbody>tr.child:hover{background:transparent !important}table.dataTable>tbody>tr.child ul.dtr-details{display:inline-block;list-style-type:none;margin:0;padding:0}table.dataTable>tbody>tr.child ul.dtr-details>li{border-bottom:1px solid #efefef;padding:.5em 0}table.dataTable>tbody>tr.child ul.dtr-details>li:first-child{padding-top:0}table.dataTable>tbody>tr.child ul.dtr-details>li:last-child{padding-bottom:0;border-bottom:none}table.dataTable>tbody>tr.child span.dtr-title{display:inline-block;min-width:75px;font-weight:bold}div.dtr-modal{position:fixed;box-sizing:border-box;top:0;left:0;height:100%;width:100%;z-index:100;padding:10em 1em}div.dtr-modal div.dtr-modal-display{position:absolute;top:0;left:0;bottom:0;right:0;width:50%;height:fit-content;max-height:75%;overflow:auto;margin:auto;z-index:102;overflow:auto;background-color:#f5f5f7;border:1px solid black;border-radius:.5em;box-shadow:0 12px 30px rgba(0, 0, 0, 0.6)}div.dtr-modal div.dtr-modal-content{position:relative;padding:2.5em}div.dtr-modal div.dtr-modal-content h2{margin-top:0}div.dtr-modal div.dtr-modal-close{position:absolute;top:6px;right:6px;width:22px;height:22px;text-align:center;border-radius:3px;cursor:pointer;z-index:12}div.dtr-modal div.dtr-modal-background{position:fixed;top:0;left:0;right:0;bottom:0;z-index:101;background:rgba(0, 0, 0, 0.6)}@media screen and (max-width: 767px){div.dtr-modal div.dtr-modal-display{width:95%}}html.dark table.dataTable>tbody>tr>td.dtr-control:before{color:rgba(255, 255, 255, 0.5) !important}html.dark table.dataTable>tbody>tr.child ul.dtr-details>li{border-bottom-color:rgb(64, 67, 70)}html.dark div.dtr-modal div.dtr-modal-display{background-color:rgb(33, 37, 41);border:1px solid rgba(255, 255, 255, 0.15)}
+    </style>
+
+    <style>
+        /* General Body and Layout */
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: #f4f6f8; color: #333; scroll-behavior: smooth; }
+        .main-content { margin-left: 250px; padding: 20px; transition: margin-left 0.3s ease; }
+
+        /* Sidebar */
+        .sidebar { width: 250px; position: fixed; left: 0; top: 0; height: 100%; background-color: #2c3e50; color: white; transition: transform 0.3s ease; display: flex; flex-direction: column; }
+        .sidebar h2 { text-align: center; color: #ecf0f1; margin-bottom: 20px; padding-top: 20px; flex-shrink: 0; }
+        .sidebar-nav { flex-grow: 1; overflow-y: auto; }
+        .sidebar a { display: block; padding: 12px 20px; color: #bdc3c7; text-decoration: none; transition: background-color 0.3s, color 0.3s; }
+        .sidebar a:hover, .sidebar a.active { background-color: #3498db; color: white; }
+        .sidebar .dropdown-toggle::after { content: '▼'; font-size: 0.7em; display: inline-block; margin-left: 50px; vertical-align: middle; transition: transform 0.3s ease; }
+        .sidebar .dropdown-toggle.open::after { transform: rotate(180deg); }
+        .sidebar .dropdown-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-in-out; background-color: #212f3d; }
+        .sidebar .dropdown-content a { padding-left: 40px; font-size: 0.9em; }
+
+        /* Header, Footer, Sections */
+        header { background: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        header h1 { color: #1f618d; margin: 0; }
+        footer { text-align: center; margin-top: 30px; padding: 15px; color: #7f8c8d; font-size: 0.9em; }
+        section { background: white; margin-bottom: 20px; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        section h2 { color: #1f618d; border-bottom: 2px solid #ddd; padding-bottom: 10px; margin-top: 0; }
+
+        /* Summary & Charts */
+        .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 20px; }
+        .summary-card { background-color: #f9f9f9; padding: 20px; border-radius: 8px; border-left: 5px solid #3498db; }
+        .summary-card h3 { margin: 0 0 10px 0; color: #2980b9; }
+        .chart-row { display: flex; flex-wrap: wrap; gap: 20px; margin-top: 20px; }
+        .chart-box { flex: 1 1 45%; min-width: 300px; height: 350px; }
+
+        /* Tabs */
+        .suspicious-nav { display: flex; border-bottom: 2px solid #ccc; padding-bottom: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .tab-item { flex-grow: 1; text-align: center; padding: 10px 0; font-weight: 600; color: #1f618d; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s ease; }
+        .tab-item.active { color: #2980b9; border-bottom-color: #3498db; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* DataTables */
+        table.dataTable { border-collapse: collapse !important; margin-top: 20px !important; width: 100% !important; }
+        table.dataTable th, table.dataTable td { border: 1px solid #ccc; padding: 12px; }
+        table.dataTable thead th { background-color: #1f618d; color: white; }
+        .dataTables_wrapper .dataTables_filter input, .dataTables_wrapper .dataTables_length select { border: 1px solid #ccc; border-radius: 4px; padding: 5px; margin: 0 5px; }
+        
+        /* Detailed Process Reasons */
+        .process-details h4 { color: #c0392b; padding: 10px; border-radius: 4px; background-color: #f9ebea; border: 1px solid #f5b7b1; margin-top: 15px; }
+        .process-details ul { padding-left: 20px; list-style-position: outside; }
+        .process-details li { margin-bottom: 8px; line-height: 1.5; }
+        .vt-score-reason { color: #8E44AD; font-weight: bold; }
+        ol.injected-dll-list { list-style-type: lower-roman; margin-left: 25px; margin-top: 5px; }
+        ol.injected-dll-list li { margin-bottom: 4px; }
+        .score-high { color: #e74c3c; font-weight: bold; border-bottom: 2px solid #e74c3c; }
+        .score-medium { color: #f39c12; font-weight: bold; border-bottom: 2px solid #f39c12; }
+        .score-low { color: #27ae60; font-weight: bold; }
+        .hidden-row { background-color: #fADBD8 !important; font-style: italic; }
+        
+        /* --- FIX: Consolidated and Improved Card Styles --- */
+        .finding-card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+        }
+        .finding-card {
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            display: flex; /* Use flexbox for layout */
+            align-items: center; /* Vertically align icon and details */
+            gap: 15px;
+        }
+        .finding-card p { margin: 0 0 8px 0; line-height: 1.5; }
+        .finding-card-details { flex-grow: 1; }
+
+        /* SSDT Hook Card Specifics */
+        .hook-card { background-color: #fcf3cf; border: 1px solid #f7dc6f; }
+        .hook-card-icon { font-size: 1.5em; }
+        .hook-card-title { font-size: 1.3em; font-weight: 600; color: #d35400; margin-bottom: 5px; }
+        .hook-card-owner { font-size: 1em; color: #333; }
+        .hook-card-meta { font-size: 0.9em; color: #666; display: flex; gap: 20px; margin-top: 10px; }
+
+        /* Module Card Specifics */
+        .module-card { background-color: #d6eaf8; border: 1px solid #aed6f1; }
+        .module-card.hidden { border-color: #e74c3c; background-color: #fadbd8; }
+        .module-card-title { font-size: 1.2em; font-weight: 600; color: #1f618d; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .module-card-badge { background-color: #c0392b; color: white; padding: 4px 8px; border-radius: 12px; font-size: 0.8em; font-weight: bold; }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .sidebar { transform: translateX(-100%); }
+            .main-content { margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Report Sections</h2>
+        <nav class="sidebar-nav">
+            <a href="#summary" class="active">Analysis Summary</a>
+            <a href="#suspicious-processes">Suspicious Analysis</a>
+            <div class="sidebar-dropdown">
+                <a href="#detailed-suspicious-processes" class="dropdown-toggle">Detailed Processes</a>
+                <div class="dropdown-content">
+                    {% for item in suspicious_processes %}
+                    <a href="#suspicious-pid-{{ item.pid }}">{{ item.pid }}: {{ item.process_name }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+            <a href="#ssdt-hooks">SSDT Hooks</a>
+            <a href="#suspicious-modules">Suspicious Modules</a>
+            {% if other_plugins != 'None' %}
+                {% for plugin_name in other_plugins %}
+                    <a href="#{{ plugin_name|replace(' ', '-') }}">{{ plugin_name }}</a>
+                {% endfor %}
+            {% endif %}
+        </nav>
+    </div>
+
+    <div class="main-content">
+        <header>
+            <h1>Windows Memory Forensics Report</h1>
+            <p><strong>Memory File:</strong> {{ memory_file }}</p>
+            <p><strong>SHA256 Hash:</strong> {{ file_hash }}</p>
+        </header>
+
+        <main>
+            <section id="summary">
+                 <h2>Analysis Summary</h2>
+                <div class="summary-grid">
+                    <div class="summary-card"><h3>Profile Used</h3><p>{{ profile }}</p></div>
+                    <div class="summary-card"><h3>Report Generated</h3><p>{{ generation_date }}</p></div>
+                    <div class="summary-card"><h3>Suspicious Processes</h3><p>{{ suspicious_processes|length }} found</p></div>
+                </div>
+                <h3>Process Risk Distribution</h3>
+                <div class="chart-row">
+                    <div class="chart-box"><canvas id="riskChart"></canvas></div>
+                    <div class="chart-box"><canvas id="categoryChart"></canvas></div>
+                </div>
+            </section>
+
+            <section id="suspicious-processes">
+                <h2 style="margin-bottom: 10px;">Suspicious Analysis</h2>
+                <div class="suspicious-nav">
+                    <span class="tab-item active" data-target="suspicious-processes-content">Suspicious Processes</span>
+                    <span class="tab-item" data-target="suspicious-dlls-content">Suspicious DLLs</span>
+                    <span class="tab-item" data-target="suspicious-files-content">Suspicious Files</span>
+                    <span class="tab-item" data-target="network-connections-content">Network</span>
+                </div>
+
+                        <div id="suspicious-processes-content" class="tab-content active">
+                            {% if suspicious_processes %}
+                                <!-- UPDATED: Added class="data-table" -->
+                                <table class="display responsive data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>PID</th>
+                                            <th>Process Name</th>
+                                            <th>Suspicious Score</th>
+                                            <th>VirusTotal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for item in suspicious_processes %}
+                                        <tr>
+                                            <td>{{ item.pid }}</td>
+                                            <td><a href="#suspicious-pid-{{ item.pid }}">{{ item.process_name }}</a></td>
+                                            <td>{{ item.score }}</td>
+                                            <td>{{ item.vt_score }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% else %}
+                                <p>No suspicious processes detected.</p>
+                            {% endif %}
+                        </div>
+
+                        <div id="suspicious-dlls-content" class="tab-content">
+                             {% if suspicious_dlls %}
+                                <!-- UPDATED: Added class="data-table" -->
+                                <table class="display responsive data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>DLL Name</th>
+                                            <th>DLL Path</th>
+                                            <th>Reason</th>
+                                            <th>Process | PID</th>
+                                            <th>VirusTotal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for dll in suspicious_dlls %}
+                                        <tr>
+                                            <td>{{ dll.name }}</td>
+                                            <td>{{ dll.path }}</td>
+                                            <td>{{ dll.reason }}</td>
+                                            <td>{{ dll.process_name }} | {{ dll.pid }}</td>
+                                            <td>{{ dll.vt_score }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                             {% else %}
+                                <p>No suspicious DLLs detected.</p>
+                             {% endif %}
+                        </div>
+
+                        <div id="suspicious-files-content" class="tab-content">
+                            {% if suspicious_files %}
+                                <!-- UPDATED: Added class="data-table" -->
+                                <table class="display responsive data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>File Name</th>
+                                            <th>File Path</th>
+                                            <th>Offset</th>
+                                            <th>Associated Process</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for file in suspicious_files %}
+                                        <tr>
+                                            <td>{{ file.name }}</td>
+                                            <td>{{ file.path }}</td>
+                                            <td>{{ file.offset }}</td>
+                                            <td>{{ file.process_name }} ({{ file.pid }})</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% else %}
+                                <p>No suspicious file access detected.</p>
+                            {% endif %}
+                        </div>
+
+                        
+                        <div id="network-connections-content" class="tab-content">
+                            {% if network_data.networks %}
+                                <h3>Network Connections</h3>
+                                <table class="display responsive data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Protocol</th>
+                                            <th>Local Address</th>
+                                            <th>Foreign Address</th>
+                                            <th>State</th>
+                                            <th>Process | PID</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for conn in network_data.networks %}
+                                        <tr class="{% if conn.is_hidden %}hidden-row{% endif %}">
+                                            <td>{{ conn.protocol }}</td>
+                                            <td>{{ conn.local_ip }}:{{ conn.local_port }}</td>
+                                            <td>{{ conn.foreign_ip }}:{{ conn.foreign_port }}</td>
+                                            <td>{{ conn.state }}</td>
+                                            <td>{{ conn.process_name }} | {{ conn.pid }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% endif %}
+                            {% if network_data.connections %}
+                                <h3>Network Connections</h3>
+                                <table class="display responsive data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Local Address</th>
+                                            <th>Local Port</th>
+                                            <th>Foreign Address</th>
+                                            <th>Foreign Port</th>
+                                            <th>Process | PID</th>
+                                            <th>Notes</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for conn in network_data.connections %}
+                                        <tr class="{% if conn.is_hidden %}hidden-row{% endif %}">
+                                            <td>{{ conn.local_ip }}</td>
+                                            <td>{{ conn.local_port }}</td>
+                                            <td>{{ conn.foreign_ip }}</td>
+                                            <td>{{ conn.foreign_port }}</td>
+                                            <td>{{ conn.process_name }} | {{ conn.pid }}</td>
+                                            <td>{% if conn.is_hidden %}Hidden{% endif %}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% else %}
+                            <hr>
+                            {% endif %}
+                            {% if network_data.sockets %}
+                            <h3>Open Sockets</h3>
+                                <table class="display responsive data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Protocol</th>
+                                            <th>Address</th>
+                                            <th>Port</th>
+                                            <th>Process | PID</th>
+                                            <th>Notes</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for sock in network_data.sockets %}
+                                        <tr class="{% if sock.is_hidden %}hidden-row{% endif %}">
+                                            <td>{{ sock.protocol }}</td>
+                                            <td>{{ sock.address }}</td>
+                                            <td>{{ sock.port }}</td>
+                                            <td>{{ sock.process_name }} | {{ sock.pid }}</td>
+                                            <td>{% if sock.is_hidden %}Hidden{% endif %}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% endif %}
+                            {% if not network_data.sockets and not network_data.connections and not network_data.networks %}
+                                <p>No network artifacts (connections or sockets) were found.</p>
+                            {% endif %}
+                        </div>
+
+            </section>
+
+            <section id="detailed-suspicious-processes">
+                <h2>Detailed Process Analysis</h2>
+                {% for item in suspicious_processes %}
+                <div class="process-details">
+                    <h4 id="suspicious-pid-{{ item.pid }}">Process: {{ item.process_name }} (PID: {{ item.pid }}) {% if item.is_hidden %}<span class="hidden-tag">[Hidden]</span>{% endif %}</h4>
+                    <ul>
+                        {% for reason in item.reasons %}
+                        <li>{{ reason|safe }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% else %}
+                <p>No suspicious processes to detail.</p>
+                {% endfor %}
+            </section>
+            
+            <section id="ssdt-hooks">
+                <h2>SSDT Hook Analysis</h2>
+                {% if ssdt_hooks %}
+                    <!-- FIX: Updated to use the new card grid and layout -->
+                    <div class="finding-card-grid">
+                        {% for hook in ssdt_hooks %}
+                        <div class="finding-card hook-card">
+                            <div class="hook-card-icon">⚠️</div>
+                            <div class="finding-card-details">
+                                <p class="hook-card-title">{{ hook.function_name }}</p>
+                                <p class="hook-card-owner">Hooked by: <strong>{{ hook.owner }}</strong></p>
+                                <div class="hook-card-meta">
+                                    <span><strong>Address:</strong> {{ hook.address }}</span>
+                                    <span><strong>Entry:</strong> {{ hook.entry }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p>No suspicious SSDT hooks were detected.</p>
+                {% endif %}
+            </section>
+            <section id="suspicious-modules">
+                <h2>Suspicious Modules</h2>
+                {% if suspicious_modules %}
+                    <div class="finding-card-grid">
+                        {% for module in suspicious_modules %}
+                        <div class="finding-card module-card {% if module.is_hidden %}hidden{% endif %}">
+                            <div class="finding-card-details">
+                                <p class="module-card-title">
+                                    <span>{{ module.name }}</span>
+                                    {% if module.is_hidden %}
+                                        <span class="module-card-badge">Hidden</span>
+                                    {% endif %}
+                                </p>
+                                <p><strong>Path:</strong> {{ module.path }}</p>
+                                <p><strong>Base Address:</strong> {{ module.base_addr }}</p>
+                                <p><strong>Size:</strong> {{ module.size }}</p>
+                                <p><strong>Reason:</strong> {{ module.reason }}</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p>No suspicious or hidden kernel modules were detected.</p>
+                {% endif %}
+            </section>
+
+            {% for plugin in other_plugins %}
+            <section id="{{ plugin|replace(' ', '-') }}">
+                <!-- Other Plugins Content -->
+                <h2>Plugin: {{ plugin }}</h2>
+                {% if plugin in results and results[plugin] is mapping and 'rows' in results[plugin] %}
+                <table class="display responsive data-table">
+                    <thead>
+                        <tr>
+                            {% for header in results[plugin].columns %}
+                            <th>{{ header }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in results[plugin].rows %}
+                        <tr>
+                            {% for cell in row %}
+                            <td>{{ cell }}</td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <pre class="code-block">{{ results[plugin] }}</pre>
+                {% endif %}
+            </section>
+            {% endfor %}
+
+        </main>
+
+        <footer>
+            <p>Automated Windows Memory Forensics Report © {{ generation_date.split(' ')[0] }}</p>
+        </footer>
+    </div>
+
+    <!-- UPDATED: jQuery and DataTables JS -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.datatables.net/2.0.0/js/dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/3.0.0/js/dataTables.responsive.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // --- INITIALIZE DATATABLES ---
+            // This targets any table with the .data-table class and applies DataTables functionality.
+            $('.data-table').DataTable({
+                responsive: true // This enables the responsive extension
+            });
+
+            // --- CHARTING (No change needed) ---
+            const riskChartCtx = document.getElementById('riskChart');
+            if (riskChartCtx) {
+                new Chart(riskChartCtx.getContext('2d'), {
+                    type: 'doughnut',
+                    data: { labels: ['High Risk', 'Medium Risk', 'Low Risk'], datasets: [{ data: [{{ high_risk_count }}, {{ medium_risk_count }}, {{ low_risk_count }}], backgroundColor: ['#e74c3c', '#f1c40f', '#3498db'] }] },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' }, title: { display: true, text: 'Process Risk Distribution' } } }
+                });
+            }
+            const categoryChartCtx = document.getElementById('categoryChart');
+            if (categoryChartCtx) {
+                const categoryLabels = {{ category_scores.keys()|list|tojson }};
+                const categoryValues = {{ category_scores.values()|list|tojson }};
+                new Chart(categoryChartCtx.getContext('2d'), {
+                    type: 'bar',
+                    data: { labels: categoryLabels, datasets: [{ label: 'Score by Category', data: categoryValues, backgroundColor: '#9b59b6' }] },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, title: { display: true, text: 'Category-Based Suspicion Score' } } }
+                });
+            }
+
+            // --- TAB SLIDER (No change needed) ---
+            const tabs = document.querySelectorAll('.suspicious-nav .tab-item');
+            const tabContentWrapper = document.querySelector('.tab-content-wrapper');
+            
+            $('.suspicious-nav .tab-item').on('click', function() {
+                var targetId = $(this).data('target');
+
+                // Update active class on tabs
+                $('.tab-item').removeClass('active');
+                $(this).addClass('active');
+
+                // Show the target content and hide others
+                $('.tab-content').removeClass('active');
+                $('#' + targetId).addClass('active');
+
+                // Redraw the DataTable in the now-visible tab to fix column alignment
+                $('#' + targetId).find('.data-table').DataTable().columns.adjust().responsive.recalc();
+            });
+
+            // --- SIDEBAR DROPDOWN ---
+            $('.dropdown-toggle').on('click', function(e) {
+                e.preventDefault();
+                $(this).toggleClass('open');
+                const content = $(this).next('.dropdown-content');
+                content.css('max-height', content.css('max-height') !== '0px' ? '0px' : content.prop('scrollHeight') + 'px');
+            });
+
+            // --- SCROLLSPY (No change needed) ---
+            const sidebarLinks = document.querySelectorAll('.sidebar a');
+            const mainSections = document.querySelectorAll('.main-content section');
+            const onScroll = () => {
+                let activeSectionId = '';
+                mainSections.forEach(section => {
+                    if (window.scrollY >= section.offsetTop - 60) {
+                        activeSectionId = section.getAttribute('id');
+                    }
+                });
+                sidebarLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + activeSectionId) {
+                        link.classList.add('active');
+                    }
+                });
+            };
+            window.addEventListener('scroll', onScroll);
+            onScroll();
+        });
+    </script>
+</body>
+</html>
