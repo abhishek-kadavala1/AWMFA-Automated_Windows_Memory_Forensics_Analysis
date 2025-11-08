@@ -370,10 +370,11 @@ MIT License - Free for personal and commercial use with attribution.
 LinkedIn: [linkedin.com/in/abhishek-kadaval](https://www.linkedin.com/in/abhishek-kadaval)
 
 **Bhavik Shah**  
-LinkedIn: [linkedin.com/in/bhavik-shah](https://www.linkedin.com/in/bhavik-shah)
+LinkedIn: [linkedin.com/in/bhavik-shah](https://www.linkedin.com/in/bhavikshah04/)
 
 For questions, bug reports, or feature requests, please open an issue on GitHub.
 
 ---
 
 **AWMFA - Automated Windows Memory Forensics Analysis**
+
